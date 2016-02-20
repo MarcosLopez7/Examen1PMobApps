@@ -10,11 +10,13 @@
     app.config(function($stateProvider, $urlRouterProvider){
        $stateProvider.state('logging', {
             'url': '/logging',
+            'controller': 'Logging',
             'templateUrl': 'templates/logging.html'
        });
     
         $stateProvider.state('opcion', {
              'url': '/opcion',
+             'controller': 'AMenu',
              'templateUrl': 'templates/opcion.html'
         });
         
@@ -25,6 +27,29 @@
         
        $urlRouterProvider.otherwise('/logging')
         
+    });
+    
+    app.controller('Storage', function($scope, $localstorage){
+        $localstorage.setObject('storage', {
+            receta: [],
+            receta_ingrediente: [],
+            ingrediente: [],
+            pedido_receta: [],
+            pedido: [],
+            cliente: [{nombre}]
+        });
+    });
+    
+    app.controller('AMenu', function($scope, $state){
+       $scope.ir = function(){
+           $state.go('menudia'); 
+       }
+    });
+    
+    app.controller('Logging', function($scope, $state){
+       $scope.ir = function(){
+           $state.go('opcion');
+       } 
     });
 
     app.run(function($ionicPlatform) {
