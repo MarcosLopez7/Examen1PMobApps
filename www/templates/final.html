@@ -4,15 +4,15 @@
             <h2>MUCHAS GRACIAS POR SU PREFERENCIA</h2>
             <br />
             <ul>
-                <li><h4>Usuario:</h4><h5>{{ cliente.nombre }}</h5></li>
-                <li><h4>Email:</h4><h5>{{ cliente.email }}</h5></li>
-                <li><h4>Teléfono:</h4><h5>{{ cliente.telefono }}</h5></li>
-                <li><h4>Ubicación:</h4><h5>{{ cliente.ubicacion }}</h5></li>
-                <li><h4></h4></li>
+                <li><h4>Usuario: </h4><h5>{{ cliente.nombre }}</h5></li>
+                <li><h4>Email: </h4><h5>{{ cliente.email }}</h5></li>
+                <li><h4>Teléfono: </h4><h5>{{ cliente.telefono }}</h5></li>
+                <li><h4>Ubicación: </h4><h5>{{ cliente.ubicacion }}</h5></li>
+                <li><h4>Formato de pago: </h4><h5>{{ pedido.formato_pago }}</h5></li>
             </ul>
             
             <p>
-                Su pedido se hizo a las <b>{{ pedido.hora_pedido }}</b>, y su orden será entregado a las <b>{{ pedido.hora_entrega }}</b>
+                Su pedido se hizo a las <b>{{ pedido.hora_pedido }}</b>, y su orden será entregado a las <b>{{ pedido.hora_entrega }}</b>, su formato de pago va ser <b>{{ pedido.formato_pago }}</b>, esto va tener un costo de $<b>{{ precio }}</b> pesos
             </p>
             
             <button class="button button-full button-positive" ng-click="salir()">

@@ -80,7 +80,7 @@
                id: new Date().getTime().toString(),
                hora_pedido: datetime,
                hora_entrega: datetimeE,
-               formato_pago: "",
+               formato_pago: "Efectivo",
                personalizar: opcion,
                platillo: "",
                nombre_cliente: cliente_actual.nombre
@@ -189,6 +189,7 @@
     app.controller('Finalizar', function($scope, $state, Storage){
         $scope.cliente = cliente_actual;
         $scope.pedido = pedido_actual;
+        $scope.precio = Storage.getRecetaByName(pedido_actual.platillo).precio;
         
         $scope.salir = function(){
             

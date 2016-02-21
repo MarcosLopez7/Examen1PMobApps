@@ -21,7 +21,8 @@
                                 procedimiento: "Echarle crema al huitlacoche",
                                 original: "S",
                                 chef: "Raul Morales",
-                                calorias: 2000
+                                calorias: 2000,
+                                precio: 100
                             },
                             {
                                 id: 2, 
@@ -32,7 +33,8 @@
                                 procedimiento: "Matar rana y echarla en tostada",
                                 original: "N",
                                 chef: "Nicolas Maduro",
-                                calorias: 667
+                                calorias: 667,
+                                precio: 220
                             },
                             {
                                 id: 3, 
@@ -43,7 +45,8 @@
                                 procedimiento: "Echar chorizo a tlacoyo",
                                 original: "S",
                                 chef: "Raul Morales",
-                                calorias: 777
+                                calorias: 777,
+                                precio: 90
                             },
                             {
                                 id: 4, 
@@ -54,7 +57,8 @@
                                 procedimiento: "Cortar patas y echarlo en tostada",
                                 original: "N",
                                 chef: "Peña Nieto",
-                                calorias: 678
+                                calorias: 678,
+                                precio: 125
                             },
                             {
                                 id: 5, 
@@ -65,7 +69,8 @@
                                 procedimiento: "Echar chipotles al nopal",
                                 original: "S",
                                 chef: "Chapo Guzman",
-                                calorias: 1111
+                                calorias: 1111,
+                                precio: 190
                             }
                         ],
                         receta_ingrediente: [
