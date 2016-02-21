@@ -21,3 +21,24 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+$wi: 10em;
+$hei: 7em;
+$fonts:    Helvetica, sans-serif;
+
+img
+{
+  width : $wi;
+  height : $hei;
+  float : right;
+  border: 3px double #a6a6a6;
+}
+
+.pito
+{
+  font-family: $fonts;
+}
+
+.kuz
+{
+   font-weight: 900;
+}

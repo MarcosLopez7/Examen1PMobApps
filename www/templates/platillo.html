@@ -1,11 +1,11 @@
 <div>
     <ion-view>
         <ion-nav-title>{{ platillo }}</ion-nav-title>
-        <ion-content> 
+        <ion-content class="pito"> 
 
-                <p>Estimado {{ cliente }}, usted ha seleccionado el platillo {{ platillo }} con los siguientes ingredientes</p>
+                <p class="kuz" style="font-weight:900">Estimado {{ cliente }}, usted ha seleccionado el platillo {{ platillo }} con los siguientes ingredientes</p>
             
-                <ul>
+                <ul style="margin:1em;">
             
                     <li ng-repeat="ingrediente in ingredientes">
                         {{ ingrediente }}
@@ -13,13 +13,13 @@
                     
                 </ul>
             
-                <img ng-src="{{ imagen }}">
-            
-                <button class="button button-assertive">
+                <img ng-src="{{ imagen }}" style="widht:10em;height:7em;float:right;margin-left:17em;margin-top:-3em;position:absolute;">
+                <br/><br/><br/><br/>
+                <button class="button button-assertive" ng-click="regresar()">
                     Cancelar
                 </button>
             
-                <button class="button button-balanced">
+                <button class="button button-balanced" ng-click="continuar()">
                     Confirmar
                 </button>
             

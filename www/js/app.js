@@ -4,6 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 (function(){
+    
     var app = angular.module('starter', ['ionic', 'starter.Storage']);
     var cliente_actual = {};
     var pedido_actual = {};
@@ -41,22 +42,15 @@
             
         });
         
+        $stateProvider.state('final', {
+            'url': '/final',
+            'controller': 'Finalizar',
+            'templateUrl': 'templates/final.html'
+        });
+        
        $urlRouterProvider.otherwise('/logging')
         
     });
-    
-    /*app.controller('Storage', function($scope, $localstorage){
-        $localstorage.setObject('storage', {
-            receta: [],
-            receta_ingrediente: [],
-            ingrediente: [],
-            pedido_receta: [],
-            pedido: [],
-            cliente: [{nombre: "Marcos", password: "12345", email: "marcos@gmail.com", telefono: "5566778899", ubicacion: "Jugueteria"}]
-        });
-        
-        
-    });*/
     
     app.controller('AMenu', function($scope, $state, Storage){
        $scope.ir = function(opcion){
@@ -134,7 +128,31 @@
         if(pedido_actual.personalizar === "S"){
             $scope.ingredientes = ing_pla_temp;
         } else {
-            $scope.ingredientes = Storage.getIngredientes(Storage.getIdReceta(pedido_actual.platillo));
+            ing_pla_temp = Storage.getIngredientes(Storage.getIdReceta(pedido_actual.platillo));
+            $scope.ingredientes = ing_pla_temp;
+        }
+        
+        $scope.regresar = function(){
+            if(pedido_actual.personalizar === "S"){
+                ing_pla_temp = [];
+                $state.go('personalizar');
+            } else {
+                ing_pla_temp = [];
+                $state.go('menudia');
+            }
+        };
+        
+        $scope.continuar = function(){
+            $state.go('final');    
+        }
+    });
+    
+    app.controller('Finalizar', function($scope, $state, Storage){
+        $scope.cliente = cliente_actual;
+        
+        $scope.salir = function(){
+            $state.go('logging');
+            location.reload(1);
         }
     });
 
