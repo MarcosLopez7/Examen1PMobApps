@@ -4,8 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 (function(){
-    var app = angular.module('starter', ['ionic']);
-    
+    var app = angular.module('starter', ['ionic', 'starter.Storage']);
+    var cliente_actual = {};
+    var pedido_actual = {};
+    var ing_pla_temp = [];
     
     app.config(function($stateProvider, $urlRouterProvider){
        $stateProvider.state('logging', {
@@ -22,34 +24,118 @@
         
         $stateProvider.state('menudia', {
               'url': '/menudia',
+              'controller': 'Seleccion',
               'templateUrl': 'templates/menudia.html'
+        });
+        
+        $stateProvider.state('personalizar', {
+            'url': '/personalizar',
+            'controller': 'Personalizar',
+            'templateUrl': 'templates/personalizar.html'
+        });
+        
+        $stateProvider.state('platillo', {
+            'url': '/platillo',
+            'controller': 'Platillar',
+            'templateUrl': 'templates/platillo.html'
+            
         });
         
        $urlRouterProvider.otherwise('/logging')
         
     });
     
-    app.controller('Storage', function($scope, $localstorage){
+    /*app.controller('Storage', function($scope, $localstorage){
         $localstorage.setObject('storage', {
             receta: [],
             receta_ingrediente: [],
             ingrediente: [],
             pedido_receta: [],
             pedido: [],
-            cliente: [{nombre}]
+            cliente: [{nombre: "Marcos", password: "12345", email: "marcos@gmail.com", telefono: "5566778899", ubicacion: "Jugueteria"}]
         });
-    });
+        
+        
+    });*/
     
-    app.controller('AMenu', function($scope, $state){
-       $scope.ir = function(){
+    app.controller('AMenu', function($scope, $state, Storage){
+       $scope.ir = function(opcion){
+           var pedido = {
+               id: new Date().getTime().toString(),
+               hora_pedido: new Date().getTime().toString(),
+               hora_entrega: (new Date().getTime() + 30).toString(),
+               formato_pago: "",
+               personalizar: opcion,
+               platillo: "",
+               nombre_cliente: cliente_actual.nombre
+           };
+           
+           pedido_actual = pedido;
+           Storage.pushPedido(pedido);
            $state.go('menudia'); 
        }
     });
     
-    app.controller('Logging', function($scope, $state){
+    app.controller('Logging', function($scope, $state, Storage){
+        Storage.nuevo();
+        
+        $scope.cliente = {nombre: '', password: ''};
+        
        $scope.ir = function(){
-           $state.go('opcion');
+           var cliente = Storage.getPass();
+           
+           if (Storage.getPass($scope.cliente.nombre, $scope.cliente.password)){
+               cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
+               $state.go('opcion');
+           } else {
+               alert("Usuario o contraseña con cancer\n");
+           }
+           
        } 
+    });
+    
+    app.controller('Seleccion', function($scope, $state, Storage){
+       $scope.recetas = Storage.getBd().receta;
+       $scope.seleccion = "";
+        
+       $scope.irIngredientes = function(seleccion){
+            pedido_actual.platillo = seleccion;
+           
+            if(pedido_actual.personalizar === "S"){
+                $state.go('personalizar');
+            }  else {
+                $state.go('platillo');
+            }
+       }
+    });
+    
+    app.controller('Personalizar', function($scope, $state, Storage){
+        $scope.platillo = pedido_actual.platillo;
+        console.log(pedido_actual.platillo);
+        $scope.ingredientes = Storage.getBd().ingrediente; 
+        
+        $scope.aPlatillo = function(){
+            
+            for(var i = 0; i < $scope.ingredientes.length; i++){
+                if($scope.ingredientes[i].selected){
+                    ing_pla_temp.push($scope.ingredientes[i].nombre);
+                }
+            }
+            
+            $state.go('platillo');
+            
+        }
+    });
+    
+    app.controller('Platillar', function($scope, $state, Storage){
+        $scope.platillo = pedido_actual.platillo;
+        $scope.cliente = cliente_actual.nombre;
+        $scope.imagen = Storage.getImagen(pedido_actual.platillo);
+        if(pedido_actual.personalizar === "S"){
+            $scope.ingredientes = ing_pla_temp;
+        } else {
+            $scope.ingredientes = Storage.getIngredientes(Storage.getIdReceta(pedido_actual.platillo));
+        }
     });
 
     app.run(function($ionicPlatform) {

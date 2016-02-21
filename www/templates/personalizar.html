@@ -1,0 +1,18 @@
+<div>
+    <ion-view>
+        <ion-nav-title>{{ platillo }}</ion-nav-title>
+        <ion-content> 
+
+            <ion-list>
+
+                <ion-checkbox ng-repeat="ingrediente in ingredientes" ng-model="ingrediente.selected">{{ ingrediente.nombre }}</ion-checkbox>
+
+            </ion-list>
+            
+            <button class="button button-block button-positive" ng-click="aPlatillo()">
+                Block Button
+            </button>
+            
+        </ion-content>
+    </ion-view>
+</div>

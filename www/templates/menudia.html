@@ -9,15 +9,15 @@
                         Menu del día
                     </div>
                     
-                    <select>
-                        <option>Nopalitos con chipotle</option>
-                        <option>Huitlacoche con crema</option>
-                        <option>Fritada de ranas</option>
-                        <option>Tlacoyos</option>
-                        <option>Tostadas de pata</option>
+                    <select ng-model="seleccion">
+                        <option ng-repeat="receta in recetas">{{ receta.nombre }}</option>
                     </select>
                 </label>
 
+                <button class="button button-block button-dark" ng-click="irIngredientes(seleccion)">
+                    Selecionar Platillo
+                </button>
+                
             </div>
             
         </ion-content>
