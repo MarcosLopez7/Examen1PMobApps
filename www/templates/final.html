@@ -1,5 +1,5 @@
 <div>
-    <ion-view view-title="Confirmación">
+    <ion-view view-title="Cafeteria ITESM: Confirmación">
         <ion-content>    
             <h2>MUCHAS GRACIAS POR SU PREFERENCIA</h2>
             <br />
@@ -10,6 +10,10 @@
                 <li><h4>Ubicación:</h4><h5>{{ cliente.ubicacion }}</h5></li>
                 <li><h4></h4></li>
             </ul>
+            
+            <p>
+                Su pedido se hizo a las <b>{{ pedido.hora_pedido }}</b>, y su orden será entregado a las <b>{{ pedido.hora_entrega }}</b>
+            </p>
             
             <button class="button button-full button-positive" ng-click="salir()">
                 Salir

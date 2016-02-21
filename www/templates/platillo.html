@@ -1,7 +1,7 @@
 <div>
     <ion-view>
-        <ion-nav-title>{{ platillo }}</ion-nav-title>
-        <ion-content class="pito"> 
+        <ion-nav-title>Cafeteria ITESM: {{ platillo }} seleccionado</ion-nav-title>
+        <ion-content> 
 
                 <p class="kuz" style="font-weight:900">Estimado {{ cliente }}, usted ha seleccionado el platillo {{ platillo }} con los siguientes ingredientes</p>
             
@@ -15,6 +15,24 @@
             
                 <img ng-src="{{ imagen }}" style="widht:10em;height:7em;float:right;margin-left:17em;margin-top:-3em;position:absolute;">
                 <br/><br/><br/><br/>
+            
+                
+                <!--id: 1, 
+                                nombre: "Huitlacoche con crema", 
+                                img: "../img/hui.jpg",
+                                libro: "Allah Uakbar",
+                                tipo: "Crema",
+                                procedimiento: "Echarle crema al huitlacoche",
+                                original: "S",
+                                chef: "Raul Morales",
+                                calorias: 2000
+                -->
+            
+            <p>El libro de esta receta es <b>{{ receta.libro }}</b>, esta receta es de tipo <b>{{ receta.tipo }}</b>, tiene un procedimiento de <b>{{ receta.procedimiento }}</b>, la receta <b>{{ original }}</b>, esta receta la elabora nuestro chef <b>{{ receta.chef }}</b>, es un platillo de dieta con <b>{{ receta.calorias }}</b> calorias</p>
+                
+                <br/><br/>
+            
+                <center>
                 <button class="button button-assertive" ng-click="regresar()">
                     Cancelar
                 </button>
@@ -22,7 +40,7 @@
                 <button class="button button-balanced" ng-click="continuar()">
                     Confirmar
                 </button>
-            
+                </center>
         </ion-content>
     </ion-view>
 </div>
