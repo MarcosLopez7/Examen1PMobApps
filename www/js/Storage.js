@@ -22,7 +22,8 @@
                                 original: "S",
                                 chef: "Raul Morales",
                                 calorias: 2000,
-                                precio: 100
+                                precio: 100,
+                                receta_original: "Crema lechera"
                             },
                             {
                                 id: 2, 
@@ -34,7 +35,8 @@
                                 original: "N",
                                 chef: "Nicolas Maduro",
                                 calorias: 667,
-                                precio: 220
+                                precio: 220,
+                                receta_original: "Ranas a la boloñesa"
                             },
                             {
                                 id: 3, 
@@ -46,7 +48,8 @@
                                 original: "S",
                                 chef: "Raul Morales",
                                 calorias: 777,
-                                precio: 90
+                                precio: 90,
+                                receta_original: "Quesadillas con choriqueso"
                             },
                             {
                                 id: 4, 
@@ -58,7 +61,8 @@
                                 original: "N",
                                 chef: "Peña Nieto",
                                 calorias: 678,
-                                precio: 125
+                                precio: 125,
+                                receta_original: "Pata al horno"
                             },
                             {
                                 id: 5, 
@@ -70,7 +74,8 @@
                                 original: "S",
                                 chef: "Chapo Guzman",
                                 calorias: 1111,
-                                precio: 190
+                                precio: 190,
+                                receta_original: "Nopales con chile"
                             }
                         ],
                         receta_ingrediente: [
@@ -99,6 +104,7 @@
                         pedido: [],
                         cliente: [
                             {
+                                id: 1,
                                 nombre: "Marcos", 
                                 password: "12345", 
                                 email: "marcos@gmail.com", 
@@ -106,6 +112,7 @@
                                 ubicacion: "Jugueteria"
                             },
                             {
+                                id: 2,
                                 nombre: "Raul",
                                 password: "6969",
                                 email: "raulms@itesm.mx",
@@ -163,7 +170,7 @@
                   if(id_receta === bd.receta_ingrediente[i].id_receta){
                       for(var j = 0; j < bd.ingrediente.length; j++){
                           if(bd.receta_ingrediente[i].id_ingrediente == bd.ingrediente[j].id){
-                              ingredientes.push(bd.ingrediente[j].nombre);
+                              ingredientes.push({nombre: bd.ingrediente[j].nombre, cantidad: bd.receta_ingrediente[i].cantidad});
                           }
                       }
                   }

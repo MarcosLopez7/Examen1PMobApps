@@ -8,7 +8,7 @@
                 <ul style="margin:1em;">
             
                     <li ng-repeat="ingrediente in ingredientes">
-                        {{ ingrediente }}
+                        {{ ingrediente.nombre }} con cantidad de {{ ingrediente.cantidad }} unidades
                     </li>
                     
                 </ul>
@@ -28,7 +28,7 @@
                                 calorias: 2000
                 -->
             
-            <p>El libro de esta receta es <b>{{ receta.libro }}</b>, esta receta es de tipo <b>{{ receta.tipo }}</b>, tiene un procedimiento de <b>{{ receta.procedimiento }}</b>, la receta <b>{{ original }}</b>, esta receta la elabora nuestro chef <b>{{ receta.chef }}</b>, es un platillo de dieta con <b>{{ receta.calorias }}</b> calorias</p>
+            <p>El libro de esta receta es <b>{{ receta.libro }}</b>, esta receta es de tipo <b>{{ receta.tipo }}</b>, tiene un procedimiento de <b>{{ receta.procedimiento }}</b>, la receta <b>{{ original }}</b>, esta receta la elabora nuestro chef <b>{{ receta.chef }}</b>, es un platillo de dieta con <b>{{ receta.calorias }}</b> calorias, la receta original de esta misma viene del platillo <b>{{ receta.receta_original }}</b></p>
                 
                 <br/><br/>
             

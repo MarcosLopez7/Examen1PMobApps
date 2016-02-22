@@ -9,6 +9,7 @@
     var cliente_actual = {};
     var pedido_actual = {};
     var ing_pla_temp = [];
+    var cantidades = [];
     
     app.config(function($stateProvider, $urlRouterProvider){
        $stateProvider.state('logging', {
@@ -83,7 +84,8 @@
                formato_pago: "Efectivo",
                personalizar: opcion,
                platillo: "",
-               nombre_cliente: cliente_actual.nombre
+               id_cliente: cliente_actual.id,
+               id_receta: 0
            };
            
            pedido_actual = pedido;
@@ -116,7 +118,7 @@
         
        $scope.irIngredientes = function(seleccion){
             pedido_actual.platillo = seleccion;
-           
+            pedido_actual.id_platillo = Storage.getIdReceta(seleccion);
            
             if(seleccion != ""){
                 
@@ -141,7 +143,7 @@
             
             for(var i = 0; i < $scope.ingredientes.length; i++){
                 if($scope.ingredientes[i].selected){
-                    ing_pla_temp.push($scope.ingredientes[i].nombre);
+                    ing_pla_temp.push({nombre: $scope.ingredientes[i].nombre, cantidad: 1});
                 }
             }
             
