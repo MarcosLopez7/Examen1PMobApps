@@ -1,7 +1,7 @@
 (function(){
     var app = angular.module('starter.Storage', []);
     
-    app.factory('Storage', function(){
+    app.factory('Storage', function($http){
         
         var bd = angular.fromJson(window.localStorage['bd'] || '{}');
         function persist(){
@@ -93,7 +93,7 @@
                             {id: 2, nombre: "Tostada"},
                             {id: 3, nombre: "Rana"},
                             {id: 4, nombre: "Fritadas"},
-                            {id: 5, nombre: "Marshmamellow"},
+                            {id: 5, nombre: "Marshmallow"},
                             {id: 6, nombre: "Spaguetti"},
                             {id: 7, nombre: "Chipotle"},
                             {id: 8, nombre: "Nopales"},
@@ -114,10 +114,10 @@
                             {
                                 id: 2,
                                 nombre: "Raul",
-                                password: "6969",
+                                password: "667",
                                 email: "raulms@itesm.mx",
-                                telefono: "5569696969",
-                                ubicacion: "El cuarto de la princesa"
+                                telefono: "5566776677",
+                                ubicacion: "Aulas 3 Piso 2"
                             }
                         ]
                };

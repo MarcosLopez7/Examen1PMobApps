@@ -106,7 +106,7 @@
                cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
                $state.go('opcion');
            } else {
-               alert("Usuario o contraseña con cancer\n");
+               alert("Usuario o contraseña inválidas\n");
            }
            
        } 
@@ -137,18 +137,22 @@
     app.controller('Personalizar', function($scope, $state, Storage){
         $scope.platillo = pedido_actual.platillo;
         $scope.ingredientes = Storage.getBd().ingrediente; 
-        
+        var centinela = false;
         
         $scope.aPlatillo = function(){
             
             for(var i = 0; i < $scope.ingredientes.length; i++){
                 if($scope.ingredientes[i].selected){
                     ing_pla_temp.push({nombre: $scope.ingredientes[i].nombre, cantidad: 1});
+                    centinela = true;
                 }
             }
             
-            $state.go('platillo');
-            
+            if(centinela){
+                $state.go('platillo');
+            } else {
+                alert("Por favor, seleccione por lo menos un ingrediente\n");
+            }
         }
     });
     
