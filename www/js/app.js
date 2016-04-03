@@ -100,12 +100,16 @@
         $scope.cliente = {nombre: '', password: ''};
         
        $scope.ir = function(){
-           var cliente = Storage.getPass();
            
-           if (Storage.getPass($scope.cliente.nombre, $scope.cliente.password)){
+           var cliente = Storage.getPass($scope.cliente.nombre, $scope.cliente.password);
+           
+           console.log(cliente);
+           
+           if ( cliente == null){
                cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
                $state.go('opcion');
            } else {
+               //console.log(Storage.getPass($scope.cliente.nombre, $scope.cliente.password));
                alert("Usuario o contraseña inválidas\n");
            }
            

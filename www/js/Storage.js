@@ -11,7 +11,7 @@
         return {
           nuevo: function(){
               bd = {
-                        receta: [
+                        /*receta: [
                             {
                                 id: 1, 
                                 nombre: "Huitlacoche con crema", 
@@ -77,7 +77,8 @@
                                 precio: 190,
                                 receta_original: "Nopales con chile"
                             }
-                        ],
+                        ],*/
+                        receta: [  ],
                         receta_ingrediente: [
                                                 {id_receta: 1, id_ingrediente: 1, cantidad: 5},
                                                 {id_receta: 2, id_ingrediente: 3, cantidad: 3},
@@ -122,6 +123,11 @@
                         ]
                };
                
+               $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){
+                    angular.forEach(posts, function(post){
+                        bd.receta.push(post);
+                    });
+               });
                persist();
                return;
               
@@ -130,6 +136,7 @@
             return bd;  
           },
           getCliente: function(nombre, pass){
+              
               for (var i = 0; i < bd.cliente.length; i++){  
                     if(pass === bd.cliente[i].password && nombre.toLowerCase() === bd.cliente[i].nombre.toLowerCase()){
                         return bd.cliente[i];
@@ -139,13 +146,36 @@
               return;
           },
           getPass: function(nombre, pass){
-              for (var i = 0; i < bd.cliente.length; i++){  
+              
+              var user;
+              
+              var i = 0;
+              
+              $http.post('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.login.php?name=' + nombre +'&pass=' + pass).success(function(posts){
+                  
+                  user = posts[0];
+                  console.log(user);
+                  return user;
+                 /*angular.forEach(posts, function(post){
+                      if(post != null) {
+                        user = post;
+                          console.log("QUe petardo?\n");
+                      }
+                 });*/
+              }).error(function(){
+                  console.log("QUe pedo?\n");
+              });
+              
+              //console.log(user);
+              
+              //return;
+              /*for (var i = 0; i < bd.cliente.length; i++){  
                     if(pass === bd.cliente[i].password && nombre.toLowerCase() === bd.cliente[i].nombre.toLowerCase()){
                         return true;
                     }
               }
               
-              return false;
+              return false;*/
           },
           pushPedido: function(pedido){
               bd.pedido.push(pedido);
