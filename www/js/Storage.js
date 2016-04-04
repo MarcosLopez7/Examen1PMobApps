@@ -1,7 +1,7 @@
 (function(){
     var app = angular.module('starter.Storage', []);
     
-    app.factory('Storage', function($http){
+    app.factory('Storage', function($http, $sce){
         
         var bd = angular.fromJson(window.localStorage['bd'] || '{}');
         function persist(){
@@ -122,22 +122,22 @@
                             }
                         ]
                };
-               /*
-               $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){
-                    angular.forEach(posts, function(post){
-                        bd.receta.push(post);
-                    });
-               }).error(function(){
-                   alert("Hubo un error al conectar con las recetas.php\n");
-               });*/
               
-              $http({method: "GET", url: "http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php",}).success(function(posts){
+              var defaultHTTPHeaders =  {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+              }
+              
+              $http.defaults.headers.post = defaultHTTPHeaders;
+               
+               $http.get($sce.trustAsResourceUrl('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php')).success(function(posts){
                     angular.forEach(posts, function(post){
                         bd.receta.push(post);
                     });
                }).error(function(){
                    alert("Hubo un error al conectar con las recetas.php\n");
                });
+              
               
                persist();
                return;

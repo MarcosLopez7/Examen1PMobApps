@@ -94,17 +94,32 @@
        }
     });
     
-    app.controller('Logging', function($scope, $state, Storage){
+    app.controller('Logging', function($scope, $state, Storage, $http){
         Storage.nuevo();
         
         $scope.cliente = {nombre: '', password: ''};
         
        $scope.ir = function(){
            
-           var cliente = Storage.getPass($scope.cliente.nombre, $scope.cliente.password);
+           //var cliente = Storage.getPass($scope.cliente.nombre, $scope.cliente.password);
            
-           console.log(cliente);
+           //console.log(cliente);
            
+           $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.login.php?name=' + $scope.cliente.nombre +'&pass=' + $scope.cliente.password).then(function(posts){
+                  
+                  console.log(posts.data[0]);
+                  
+                  if(posts.data !== "null"){
+                    cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
+                    $state.go('opcion');
+                  } else {
+                      alert("Usuario o contraseña inválidas\n");
+                  }
+                  
+              }, function(){
+                  alert("Hubo un error en el servicio\n");
+              });
+           /*
            if ( cliente == null){
                cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
                $state.go('opcion');
@@ -112,7 +127,7 @@
                //console.log(Storage.getPass($scope.cliente.nombre, $scope.cliente.password));
                alert("Usuario o contraseña inválidas\n");
            }
-           
+           */
        } 
     });
     
