@@ -122,12 +122,23 @@
                             }
                         ]
                };
-               
+               /*
                $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){
                     angular.forEach(posts, function(post){
                         bd.receta.push(post);
                     });
+               }).error(function(){
+                   alert("Hubo un error al conectar con las recetas.php\n");
+               });*/
+              
+              $http({method: "GET", url: "http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php",}).success(function(posts){
+                    angular.forEach(posts, function(post){
+                        bd.receta.push(post);
+                    });
+               }).error(function(){
+                   alert("Hubo un error al conectar con las recetas.php\n");
                });
+              
                persist();
                return;
               
@@ -147,35 +158,23 @@
           },
           getPass: function(nombre, pass){
               
-              var user;
-              
-              var i = 0;
-              
-              $http.post('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.login.php?name=' + nombre +'&pass=' + pass).success(function(posts){
+              $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.login.php?name=' + nombre +'&pass=' + pass).success(function(posts){
                   
-                  user = posts[0];
-                  console.log(user);
-                  return user;
-                 /*angular.forEach(posts, function(post){
-                      if(post != null) {
-                        user = post;
-                          console.log("QUe petardo?\n");
-                      }
-                 });*/
+                  console.log(posts[0]);
+                  
+                  if(posts[0] != null){
+                    alert(posts[0].nombre);
+                    return posts[0];   
+                  }
+                  else {
+                      return null;
+                  }
+                  
               }).error(function(){
-                  console.log("QUe pedo?\n");
+                  console.log("Hubo un error\n");
+                  return null;
               });
               
-              //console.log(user);
-              
-              //return;
-              /*for (var i = 0; i < bd.cliente.length; i++){  
-                    if(pass === bd.cliente[i].password && nombre.toLowerCase() === bd.cliente[i].nombre.toLowerCase()){
-                        return true;
-                    }
-              }
-              
-              return false;*/
           },
           pushPedido: function(pedido){
               bd.pedido.push(pedido);
@@ -183,6 +182,22 @@
               return;
           },
           getImagen: function(platillo){
+              
+              /*
+                $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.imagen.php?name=' + platillo).success(function(posts){
+                  
+                  if(posts[0] != null){
+                    return posts[0];   
+                  }
+                  else {
+                      return null;
+                  }
+                  
+              }).error(function(){
+                  console.log("Hubo un error en imagen.php\n");
+                  return null;
+              });
+              */
               
               for(var i = 0; i < bd.receta.length; i++){
                   if(platillo === bd.receta[i].nombre){
@@ -219,11 +234,50 @@
           },
           getRecetaByName: function(receta){
             
+              var parameter = encodeURIComponent(receta.trim());
+              
+              /*
+              $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.una.receta.php?name=' + parameter).success(function(posts){
+                    return posts[0];
+               }).error(function(){
+                   console.log("Hubo un error al conectar con las recetas.php\n");
+                   return null;
+               });
+              */
+              
               for(var i = 0; i < bd.receta.length; i++){
                   if(receta === bd.receta[i].nombre){
                       return bd.receta[i];
                   }
               }          
+          },
+          getRecetas: function(){
+              var recetas = [];
+              
+              $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){
+                    angular.forEach(posts, function(post){
+                        recetas.push(post);
+                    });
+               }).error(function(){
+                   console.log("Hubo un error al conectar con las recetas.php\n");
+                   return null;
+               });
+              
+              return recetas;
+          },
+          getAllIngredientes: function(){
+              var ingredientes = [];
+              
+              $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){
+                    angular.forEach(posts, function(post){
+                        ingredientes.push(post);
+                    });
+               }).error(function(){
+                   console.log("Hubo un error al conectar con los ingredientes.php\n");
+                   return null;
+               });
+              
+              return ingredientes;
           }
             
         };

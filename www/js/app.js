@@ -128,7 +128,7 @@
                 
                 if(pedido_actual.personalizar === "S"){
                     $state.go('personalizar');
-                }  else {
+                } else {
                     $state.go('platillo');
                 }
                 
