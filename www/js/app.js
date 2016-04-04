@@ -107,10 +107,8 @@
            
            $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.login.php?name=' + $scope.cliente.nombre +'&pass=' + $scope.cliente.password).then(function(posts){
                   
-                  console.log(posts.data[0]);
-                  
                   if(posts.data !== "null"){
-                    cliente_actual = Storage.getCliente($scope.cliente.nombre, $scope.cliente.password);
+                    cliente_actual = posts.data[0];
                     $state.go('opcion');
                   } else {
                       alert("Usuario o contraseña inválidas\n");
@@ -211,16 +209,25 @@
         }
     });
     
-    app.controller('Finalizar', function($scope, $state, Storage){
+    app.controller('Finalizar', function($scope, $state, Storage, $http, $sce){
         $scope.cliente = cliente_actual;
         $scope.pedido = pedido_actual;
         $scope.precio = Storage.getRecetaByName(pedido_actual.platillo).precio;
         
         $scope.salir = function(){
             
-            Storage.pushPedido(pedido_actual);
-            $state.go('logging');
-            location.reload(1);
+            var pedidoObj = JSON.stringify(pedido_actual);
+            var postURL = $sce.trustAsResourceUrl('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.insertar.pedido.php');
+            
+            $http.post('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.insertar.pedido.php?id='+pedido_actual.id+'&hp=' + pedido_actual.hora_pedido + '&he=' + pedido_actual.hora_entrega + '&fp=' + pedido_actual.formato_pago + '&idc=' + pedido_actual.id_cliente + '&pe=' + pedido_actual.personalizar + '&pl=' + pedido_actual.platillo + '&idr=' + 4).then(function(){
+                alert("Pedido recibido\n");
+                $state.go('logging');
+                location.reload(1);
+            }, function(){
+               alert("Error al guardar"); 
+            });
+            
+            
         }
     });
 
