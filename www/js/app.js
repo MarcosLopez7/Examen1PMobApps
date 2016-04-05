@@ -10,6 +10,7 @@
     var pedido_actual = {};
     var ing_pla_temp = [];
     var cantidades = [];
+    var platillo_actial = {};
     
     app.config(function($stateProvider, $urlRouterProvider){
        $stateProvider.state('logging', {
@@ -78,7 +79,7 @@
            }
            
            var pedido = {
-               id: new Date().getTime().toString(),
+               id: (new Date().getTime() % 1000000).toString(),
                hora_pedido: datetime,
                hora_entrega: datetimeE,
                formato_pago: "Efectivo",
@@ -129,56 +130,89 @@
        } 
     });
     
-    app.controller('Seleccion', function($scope, $state, Storage){
-       $scope.recetas = Storage.getBd().receta;
-       $scope.seleccion = "";
+    app.controller('Seleccion', function($scope, $state, Storage, $http){
         
-       $scope.irIngredientes = function(seleccion){
-            pedido_actual.platillo = seleccion;
-            pedido_actual.id_platillo = Storage.getIdReceta(seleccion);
+       
+       var recetas = [];
+              
+       $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.receta.php').success(function(posts){                    angular.forEach(posts, function(post){
+                        recetas.push(post);
+              });
+                $scope.recetas = recetas;
+                $scope.seleccion = "";
+        
+                $scope.irIngredientes = function(seleccion){
+                    pedido_actual.platillo = seleccion;
+                    pedido_actual.id_platillo = Storage.getIdReceta(seleccion);
            
-            if(seleccion != ""){
+                    
+                    
+                    if(seleccion != ""){
                 
-                if(pedido_actual.personalizar === "S"){
-                    $state.go('personalizar');
-                } else {
-                    $state.go('platillo');
-                }
-                
-            } else {
-                alert("Por favor, seleccione un platillo\n");
-            }
-       }
+                        $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.una.receta.php?name=' + seleccion).success(function(posts){
+                            platillo_actial = posts[0];
+                        
+                            if(pedido_actual.personalizar === "S"){
+                                $state.go('personalizar');
+                            } else {
+                                $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.ingredientes.receta.php?name=' + seleccion).success(function(posts){
+                                    angular.forEach(posts, function(post){
+                                        ing_pla_temp.push(post);
+                                    });
+                                    $state.go('platillo');
+                                });
+                            }
+                        });
+                    } else {
+                        alert("Por favor, seleccione un platillo\n");
+                    }
+                };                                                                                             
+        
+       
+        });
     });
     
-    app.controller('Personalizar', function($scope, $state, Storage){
+    app.controller('Personalizar', function($scope, $state, Storage, $http){
         $scope.platillo = pedido_actual.platillo;
-        $scope.ingredientes = Storage.getBd().ingrediente; 
-        var centinela = false;
+        var ingredientes = [];
         
-        $scope.aPlatillo = function(){
+        $http.get('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.ingredientes.php').success(function(posts){
+            angular.forEach(posts, function(post){
+                ingredientes.push(post);
+            });
             
-            for(var i = 0; i < $scope.ingredientes.length; i++){
-                if($scope.ingredientes[i].selected){
-                    ing_pla_temp.push({nombre: $scope.ingredientes[i].nombre, cantidad: 1});
-                    centinela = true;
+            $scope.ingredientes = ingredientes; 
+            var centinela = false;
+        
+            $scope.aPlatillo = function(){
+            
+                for(var i = 0; i < $scope.ingredientes.length; i++){
+                    if($scope.ingredientes[i].selected){
+                        ing_pla_temp.push({nombre: $scope.ingredientes[i].nombre, cantidad: 1});
+                        centinela = true;
+                    }
+                }
+            
+                if(centinela){
+                    $state.go('platillo');
+                } else {
+                    alert("Por favor, seleccione por lo menos un ingrediente\n");
                 }
             }
-            
-            if(centinela){
-                $state.go('platillo');
-            } else {
-                alert("Por favor, seleccione por lo menos un ingrediente\n");
-            }
-        }
+        });
+        
+        
     });
     
     app.controller('Platillar', function($scope, $state, Storage){
         $scope.platillo = pedido_actual.platillo;
         $scope.cliente = cliente_actual.nombre;
-        $scope.imagen = Storage.getImagen(pedido_actual.platillo);
         
-        $scope.receta = Storage.getRecetaByName(pedido_actual.platillo);
+        
+        
+        $scope.imagen = platillo_actial.imagen;
+        
+        $scope.receta = platillo_actial;
         $scope.original = "";
         
         if($scope.receta.original === "S"){
@@ -187,12 +221,8 @@
             $scope.original = "no es original";
         }
         
-        if(pedido_actual.personalizar === "S"){
-            $scope.ingredientes = ing_pla_temp;
-        } else {
-            ing_pla_temp = Storage.getIngredientes(Storage.getIdReceta(pedido_actual.platillo));
-            $scope.ingredientes = ing_pla_temp;
-        }
+        $scope.ingredientes = ing_pla_temp;
+        $scope.ingredientes = ing_pla_temp;
         
         $scope.regresar = function(){
             if(pedido_actual.personalizar === "S"){
@@ -212,14 +242,14 @@
     app.controller('Finalizar', function($scope, $state, Storage, $http, $sce){
         $scope.cliente = cliente_actual;
         $scope.pedido = pedido_actual;
-        $scope.precio = Storage.getRecetaByName(pedido_actual.platillo).precio;
+        $scope.precio = platillo_actial.precio;
         
         $scope.salir = function(){
             
             var pedidoObj = JSON.stringify(pedido_actual);
             var postURL = $sce.trustAsResourceUrl('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.insertar.pedido.php');
             
-            $http.post('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.insertar.pedido.php?id='+pedido_actual.id+'&hp=' + pedido_actual.hora_pedido + '&he=' + pedido_actual.hora_entrega + '&fp=' + pedido_actual.formato_pago + '&idc=' + pedido_actual.id_cliente + '&pe=' + pedido_actual.personalizar + '&pl=' + pedido_actual.platillo + '&idr=' + 4).then(function(){
+            $http.post('http://ubiquitous.csf.itesm.mx/~pddm-1020023/servicios/examen/backend/servicio.insertar.pedido.php?id=' + pedido_actual.id + '&hp=' + pedido_actual.hora_pedido + '&he=' + pedido_actual.hora_entrega + '&fp=' + pedido_actual.formato_pago + '&idc=' + pedido_actual.id_cliente + '&pe=' + pedido_actual.personalizar + '&pl=' + pedido_actual.platillo + '&idr=' + platillo_actial.id).then(function(){
                 alert("Pedido recibido\n");
                 $state.go('logging');
                 location.reload(1);
